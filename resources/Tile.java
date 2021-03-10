@@ -41,14 +41,12 @@ public class Tile
         String[] folderSplit = filePath.split("/");
         String imageName = folderSplit[folderSplit.length-1];
         current = imageName.substring(0, imageName.length() - 4);
-        System.out.println(current);
-
         //If this is the first time the icon is bein set save the name as original
         if(buttonUnchanged)
         {
 
             //If the original tile is a squirrel set empty
-            if(current == "Hole" || current == "HoleNut" || current == "Empty" || current == "Flower" || current == "SquirrelFlower" )
+            if(current.equals("Hole") || current.equals("HoleNut") || current.equals("Empty") || current.equals("Flower") || current.equals("SquirrelFlower") )
             {
                 original = p;
             }
