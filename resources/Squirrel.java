@@ -51,6 +51,69 @@ public class Squirrel
 
     //Getter and setter methods
 
+    public void move(int direction)
+    {
+        switch(direction)
+        {
+            case 0:
+                y++;
+                break;
+            case 1:
+                x++;
+                break;
+            case 2:
+                y--;
+                break;
+            case 3:
+                x--;
+                break;            
+        }
+    }
+
+
+    /**
+     @return the x coordinate of the squirrels tail
+     */
+    public int getTailsX()
+    {
+        switch(direction)
+        {
+            case 0:
+                return x;
+            case 1:
+                return x-1;
+            case 2:
+                return x;
+            //case 3
+            default:
+                return x+1;
+        }
+    }
+
+
+    
+    /**
+     @return the y coordinate of the squirrels tail
+     */
+    public int getTailsY()
+    {
+        switch(direction)
+        {
+            case 0:
+                return y+1;
+            case 1:
+                return y;
+            case 2:
+                return y-1;
+            //case 3
+            default:
+                return y;            
+        }
+    }
+
+
+    //Getter and setter methods
+
     public void setNut(boolean nut)
     {
         this.nut = nut;
@@ -63,8 +126,12 @@ public class Squirrel
     {
         this.y = y;
     }
-    public void setDirection(int direction)
+    public void setDirection(int direction) throws IllegalArgumentException
     {
+        if(direction < 0 || direction > 3)
+        {
+            throw new IllegalArgumentException("Unknown direction");
+        }
         this.direction = direction;
     }
 

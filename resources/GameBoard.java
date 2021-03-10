@@ -1,6 +1,6 @@
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
-
 
 /**
  *
@@ -48,7 +48,7 @@ public class GameBoard
 
 	 */
 
-    public GameBoard()
+    public GameBoard(ActionListener actionListener)
     {
         //Create the Frame
         window = new JFrame("Nut Store");
@@ -96,12 +96,21 @@ public class GameBoard
         up = new JButton(arrowUp);
         //the button has no border outside the image
         up.setBorder(null);
+        
+        //up.addActionListener(actionListener);
+
         down = new JButton(arrowDown);
         down.setBorder(null);
+        //down.addActionListener(actionListener);
+
         right = new JButton(arrowRight);
         right.setBorder(null);
+        //right.addActionListener(actionListener);
+
         left = new JButton(arrowLeft);
         left.setBorder(null);
+        //left.addActionListener(actionListener);
+
 
         panel.add(up, BorderLayout.NORTH);
         panel.add(right, BorderLayout.EAST);
@@ -113,10 +122,7 @@ public class GameBoard
         {
             for(int j = 0; j < yFields; j++)
             {
-                System.out.println(i);
-                System.out.println(j);
-
-                tiles[j][i] = new Tile(fieldPanel);
+                tiles[j][i] = new Tile(fieldPanel, actionListener);
             }
         }
 
@@ -183,7 +189,7 @@ public class GameBoard
         Picture p2 = new Picture(imageName2.toString(), sq.getDirection() * 90);
 
         //Let the images appear in the appropriate places
-        tiles[sq.getX()][sq.getY()].setButton(p1);
+        tiles[sq.getX()][sq.getY()].setButton(p1, sq);
 
         switch(sq.getDirection())
         {
@@ -221,6 +227,15 @@ public class GameBoard
         tiles[x][y].setButton(image);
     }
 
+
+    public void moveSquirrel(Squirrel sq, int dir)
+    {
+        tiles[sq.getX()][sq.getY()].setOriginalButton();
+        tiles[sq.getTailsX()][sq.getTailsY()].setOriginalButton();
+        sq.move(dir);
+        displaySquirrel(sq);
+    }
+
     /** Displays level 1 on the board as described in the course work specification
 
     */
@@ -248,12 +263,19 @@ public class GameBoard
 
         displaySquirrel(red);
         displaySquirrel(grey);
+        moveSquirrel(grey, 1);
+        moveSquirrel(grey, 3);
     }
+
+
+    
 
     public static void main(String[] args)
     {
-        GameBoard g = new GameBoard();
+        GameBoard g = new GameBoard(null);
         g.displayLevel1();
+
+
     }
 
 }
