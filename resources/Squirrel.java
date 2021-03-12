@@ -56,13 +56,13 @@ public class Squirrel
         switch(direction)
         {
             case 0:
-                y++;
+                y--;
                 break;
             case 1:
                 x++;
                 break;
             case 2:
-                y--;
+                y++;
                 break;
             case 3:
                 x--;

@@ -7,7 +7,7 @@ public class Tile
 {
     private JButton button;
     private boolean buttonUnchanged;
-    private Picture original;
+    private Picture original; //stores the original field in case its covered by a squirrel
     private String current;
     private Squirrel squirrel;
 
@@ -16,16 +16,14 @@ public class Tile
     @param panel the panel the tiles button is added to
 
 	 */
-    public Tile(JPanel panel, ActionListener actionListener)
+    public Tile(JPanel panel)
     {
         squirrel = null;
 
         button = new JButton();
         button.setBorder(null);
         buttonUnchanged = true;
-        //provide proper encapsulation - the button shouldnt be accessible in GameBoard
         panel.add(button);
-        //button.addActionListener(actionListener);
 
     }
 
@@ -54,13 +52,24 @@ public class Tile
             {
                 Picture empty = new Picture("icons/Empty.png", 0);
                 original = empty;
-                System.out.println("damn");
-                System.out.println(current);
             }
             
             buttonUnchanged = false;
         }
         button.setIcon(p);
+    }
+
+    public boolean isAccessible(Squirrel sq)
+    {
+        //the squirrels tail/head can access a tile if its head/tail is already on it 
+        if(sq == squirrel)
+        {
+            return true;
+        }
+
+
+        return current.equals("Hole") || current.equals("HoleNut") || current.equals("Empty");
+
     }
 
     public void setButton(Picture p, Squirrel sq)
@@ -69,7 +78,7 @@ public class Tile
         setButton(p);
     }
 
-    public void setOriginalButton()
+    public void displayOriginalButton()
     {
         setButton(original);
     }
@@ -83,5 +92,15 @@ public class Tile
     public Picture getOriginal()
     {
         return original;
+    }
+
+    public JButton getButton()
+    {
+        return button;
+    }
+
+    public Squirrel getSquirrel()
+    {
+        return squirrel;
     }
 }

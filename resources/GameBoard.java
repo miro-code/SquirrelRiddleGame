@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-
 /**
  *
  * Game Board for SCC.110 course work.
@@ -43,12 +42,14 @@ public class GameBoard
     private int xFields = 4;
     private int yFields = 4;
 
+    private Squirrel currentSquirrel;
+
 
     /** Creates a new GameBoard
 
 	 */
 
-    public GameBoard(ActionListener actionListener)
+    public GameBoard()
     {
         //Create the Frame
         window = new JFrame("Nut Store");
@@ -122,9 +123,11 @@ public class GameBoard
         {
             for(int j = 0; j < yFields; j++)
             {
-                tiles[j][i] = new Tile(fieldPanel, actionListener);
+                tiles[j][i] = new Tile(fieldPanel);
             }
         }
+
+        MovementListener movementListener = new MovementListener(this);
 
 
     }
@@ -194,16 +197,16 @@ public class GameBoard
         switch(sq.getDirection())
         {
             case 0:
-                tiles[sq.getX()][sq.getY()+1].setButton(p2);
+                tiles[sq.getX()][sq.getY()+1].setButton(p2, sq);
                 break;
             case 1:
-                tiles[sq.getX()-1][sq.getY()].setButton(p2);
+                tiles[sq.getX()-1][sq.getY()].setButton(p2, sq);
                 break;
             case 2:
-                tiles[sq.getX()][sq.getY()-1].setButton(p2);
+                tiles[sq.getX()][sq.getY()-1].setButton(p2, sq);
                 break;
             case 3:
-                tiles[sq.getX()+ 1][sq.getY()].setButton(p2);
+                tiles[sq.getX()+ 1][sq.getY()].setButton(p2, sq);
                 break;            
         }
         
@@ -228,13 +231,110 @@ public class GameBoard
     }
 
 
-    public void moveSquirrel(Squirrel sq, int dir)
+
+    public void moveCurrentSquirrel(int dir) throws IllegalArgumentException
     {
-        tiles[sq.getX()][sq.getY()].setOriginalButton();
-        tiles[sq.getTailsX()][sq.getTailsY()].setOriginalButton();
+
+        Squirrel sq = currentSquirrel; //short name 
+        boolean legalMove = true;
+
+        //check if the squirrel can be moved to the target tiles
+        switch(dir)
+        {
+            case 0:
+                if(sq.getY() - 1 < 0 || sq.getTailsY() - 1 < 0 )
+                {
+                    legalMove = false;
+                    break;
+                }
+                legalMove = legalMove && tiles[sq.getX()][sq.getY()-1].isAccessible(sq);
+                legalMove = legalMove && tiles[sq.getTailsX()][sq.getTailsY()-1].isAccessible(sq);
+                break;
+            case 1:
+                if( sq.getX() +1 > xFields-1 || sq.getTailsX() + 1 > xFields-1 )
+                {
+                    legalMove = false;
+                    break;
+                }
+                legalMove = legalMove && tiles[sq.getX()+1][sq.getY()].isAccessible(sq);
+                legalMove = legalMove && tiles[sq.getTailsX()+1][sq.getTailsY()].isAccessible(sq);
+                break;
+            case 2:
+                if( sq.getY() + 1 > yFields-1 ||  sq.getTailsY() + 1 > yFields-1 )
+                {
+                    legalMove = false;
+                    break;
+                }
+                legalMove = legalMove && tiles[sq.getX()][sq.getY()+1].isAccessible(sq);
+                legalMove = legalMove && tiles[sq.getTailsX()][sq.getTailsY()+1].isAccessible(sq);                
+                break;
+            case 3:
+                if(sq.getX() - 1< 0 || sq.getTailsX() - 1< 0 )
+                {
+                    legalMove = false;
+                    break;
+                }
+                legalMove = legalMove && tiles[sq.getX() - 1][sq.getY()].isAccessible(sq);
+                legalMove = legalMove && tiles[sq.getTailsX() - 1][sq.getTailsY()].isAccessible(sq);
+                break;     
+            default:
+                throw new IllegalArgumentException("Illegal direction");       
+        }
+
+        if(!legalMove)
+        {
+            System.out.println("Illegal move");
+            return;
+        }
+
+
+        tiles[sq.getX()][sq.getY()].displayOriginalButton();
+        tiles[sq.getTailsX()][sq.getTailsY()].displayOriginalButton();
         sq.move(dir);
         displaySquirrel(sq);
     }
+
+
+    public void selectTile(int i, int j)
+    {
+        if(tiles[i][j].equals("Hole") || tiles[i][j].equals("HoleNut") || tiles[i][j].equals("Empty") || tiles[i][j].equals("Flower") || tiles[i][j].equals("SquirrelFlower") )
+        {
+            return;
+        }
+        else
+        {
+            currentSquirrel = tiles[i][j].getSquirrel();
+            System.out.println("Set current squirrel");
+        }
+    }
+
+
+    //Getter and setter methods
+    public JButton getUpButton()
+    {
+        return up;
+    }
+
+    public JButton getDownButton()
+    {
+        return down;
+    }
+
+    public JButton getRightButton()
+    {
+        return right;
+    }
+
+    public JButton getLeftButton()
+    {
+        return left;
+    }
+
+    public Tile[][] getTiles()
+    {
+        return tiles;
+    }
+
 
     /** Displays level 1 on the board as described in the course work specification
 
@@ -263,8 +363,7 @@ public class GameBoard
 
         displaySquirrel(red);
         displaySquirrel(grey);
-        moveSquirrel(grey, 1);
-        moveSquirrel(grey, 3);
+        currentSquirrel = red;
     }
 
 
@@ -272,7 +371,7 @@ public class GameBoard
 
     public static void main(String[] args)
     {
-        GameBoard g = new GameBoard(null);
+        GameBoard g = new GameBoard();
         g.displayLevel1();
 
 
