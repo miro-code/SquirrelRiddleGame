@@ -16,10 +16,11 @@ public class Squirrel
     public static final int west = 3;
     
     private String color;
-    boolean nut;
+    private boolean nut;
     private int x;
     private int y;
     private int direction;
+    private boolean flower;
 
     /** Creates a new Squirrel
 
@@ -112,6 +113,8 @@ public class Squirrel
     }
 
 
+
+
     //Getter and setter methods
 
     public void setNut(boolean nut)
@@ -145,6 +148,11 @@ public class Squirrel
         return nut;
     }
 
+    public void dropNut()
+    {
+        nut = false;
+    }
+
     public int getX()
     {
         return x;
@@ -159,5 +167,7 @@ public class Squirrel
     {
         return direction;
     }
+
+
 
 }

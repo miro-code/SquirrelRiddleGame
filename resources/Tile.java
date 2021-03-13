@@ -8,7 +8,8 @@ public class Tile
     private JButton button;
     private boolean buttonUnchanged;
     private Picture original; //stores the original field in case its covered by a squirrel
-    private String current;
+    private String originalName; //stores the Name of "Picture original"
+    private String currentName;
     private Squirrel squirrel;
 
     /** Creates a new Tile with a button an adds it to a JPanel
@@ -38,20 +39,22 @@ public class Tile
         String filePath = p.getFilename();
         String[] folderSplit = filePath.split("/");
         String imageName = folderSplit[folderSplit.length-1];
-        current = imageName.substring(0, imageName.length() - 4);
+        currentName = imageName.substring(0, imageName.length() - 4);
         //If this is the first time the icon is bein set save the name as original
         if(buttonUnchanged)
         {
 
             //If the original tile is a squirrel set empty
-            if(current.equals("Hole") || current.equals("HoleNut") || current.equals("Empty") || current.equals("Flower") || current.equals("SquirrelFlower") )
+            if(currentName.equals("Hole") || currentName.equals("HoleNut") || currentName.equals("Empty") || currentName.equals("Flower") || currentName.equals("SquirrelFlower") )
             {
                 original = p;
+                originalName = currentName;
             }
             else
             {
                 Picture empty = new Picture("icons/Empty.png", 0);
                 original = empty;
+                originalName = "Empty";
             }
             
             buttonUnchanged = false;
@@ -68,7 +71,7 @@ public class Tile
         }
 
 
-        return current.equals("Hole") || current.equals("HoleNut") || current.equals("Empty");
+        return currentName.equals("Hole") || currentName.equals("HoleNut") || currentName.equals("Empty");
 
     }
 
@@ -83,15 +86,31 @@ public class Tile
         setButton(original);
     }
 
-
-    public String getCurrent()
+    public void setOriginal(Picture p)
     {
-        return current;
+        original = p;
+
+        //extract name
+        String filePath = p.getFilename();
+        String[] folderSplit = filePath.split("/");
+        String imageName = folderSplit[folderSplit.length-1];
+        originalName = imageName.substring(0, imageName.length() - 4);
+    }
+
+    public String getCurrentName()
+    {
+        return currentName;
     }
 
     public Picture getOriginal()
     {
         return original;
+    }
+
+    public String getOriginalName()
+    {
+        System.out.println(originalName);
+        return originalName;
     }
 
     public JButton getButton()

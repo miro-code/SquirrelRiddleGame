@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.LinkedList;
 /**
  *
  * Game Board for SCC.110 course work.
@@ -26,7 +27,7 @@ public class GameBoard
     private Picture empty;
     private Picture hole;
     private Picture flower;
-    private Picture doubleFlower;
+    private Picture squirrelFlower;
 
     private Picture arrowUp;
     private Picture arrowDown;
@@ -43,6 +44,7 @@ public class GameBoard
     private int yFields = 4;
 
     private Squirrel currentSquirrel;
+    private LinkedList<Squirrel> squirrels;
 
 
     /** Creates a new GameBoard
@@ -51,6 +53,7 @@ public class GameBoard
 
     public GameBoard()
     {
+        squirrels = new LinkedList<Squirrel>();
         //Create the Frame
         window = new JFrame("Nut Store");
         //On close exit the program
@@ -87,7 +90,7 @@ public class GameBoard
         empty = new Picture("icons/Empty.png", 0);
         hole = new Picture("icons/Hole.png", 0);
         flower = new Picture("icons/Flower.png", 0);
-        doubleFlower = new Picture("icons/SquirrelFlower.png", 0);
+        squirrelFlower = new Picture("icons/SquirrelFlower.png", 0);
         arrowUp = new Picture("icons/BigArrow.png", 0);
         arrowDown = new Picture("icons/BigArrow.png", 180);
         arrowRight = new Picture("icons/Arrow.png", 90);
@@ -139,37 +142,12 @@ public class GameBoard
 	 */
     public void displaySquirrel(Squirrel sq) throws IllegalArgumentException
     {
-        switch (sq.getDirection()) 
-        {
-            case 0:
-                if(sq.getY() < 0 || sq.getY() + 1 >= yFields || sq.getX() < 0 || sq.getX() >= xFields)
-                {
-                    throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
-                }
-                break;
-            case 1:
-            if(sq.getY() < 0 || sq.getY() >= yFields || sq.getX() - 1 < 0 || sq.getX() >= xFields)
-            {
-                throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
-            }
-            break;
-            case 2:
-            if(sq.getY() - 1 < 0 || sq.getY() >= yFields || sq.getX() < 0 || sq.getX() >= xFields)
-            {
-                throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
-            }
-            break;
-            case 3:
-            if(sq.getY() < 0 || sq.getY() + 1 >= yFields || sq.getX() < 0 || sq.getX() + 1 >= xFields)
-            {
-                throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
-            }
-            break;
-        
-            default:
-                throw new IllegalArgumentException("Squirrel facing into an unrecognized direction. It might have discovered the 3rd dimension. Beware.");
-        }
 
+            if(sq.getY() < 0 || sq.getY()>= yFields || sq.getX() < 0 || sq.getX() >= xFields || sq.getTailsX() < 0 || getTailsX() >= xFields)
+            {
+                throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
+            }
+                
         //Build the appropriate image file names
         StringBuffer imageName1 = new StringBuffer("icons/");
         imageName1.append(sq.getColor());
@@ -192,7 +170,7 @@ public class GameBoard
         Picture p2 = new Picture(imageName2.toString(), sq.getDirection() * 90);
 
         //Let the images appear in the appropriate places
-        tiles[sq.getX()][sq.getY()].setButton(p1, sq);
+        getHeadTile(sq).setButton(p1, sq);
 
         switch(sq.getDirection())
         {
@@ -278,7 +256,7 @@ public class GameBoard
                 legalMove = legalMove && tiles[sq.getTailsX() - 1][sq.getTailsY()].isAccessible(sq);
                 break;     
             default:
-                throw new IllegalArgumentException("Illegal direction");       
+                throw new IllegalArgumentException("Squirrel facing into an unrecognized direction. It might have discovered the 3rd dimension. Beware.");
         }
 
         if(!legalMove)
@@ -288,16 +266,75 @@ public class GameBoard
         }
 
 
-        tiles[sq.getX()][sq.getY()].displayOriginalButton();
-        tiles[sq.getTailsX()][sq.getTailsY()].displayOriginalButton();
+        getHeadTile(sq).displayOriginalButton();
+        getTailTile(sq).displayOriginalButton();
         sq.move(dir);
         displaySquirrel(sq);
+
+        if(sq.getNut())
+        {
+            System.out.println("Has Nut");
+            if(getHeadTile(sq).getOriginalName().equals("Hole"))
+            {
+                System.out.println("consent");
+                dropNut(sq);
+
+                Picture nut = new Picture("icons/HoleNut.png", sq.getDirection() * 90);
+                getHeadTile(sq).setOriginal(nut);
+                System.out.println("places nut");
+            }
+        }
+
+        if(checkVictory())
+        {
+            System.out.println("VICTORY");
+        }
+    }
+
+    public boolean checkVictory()
+    {
+        boolean victory = true;
+        for(int i = 0; i<squirrels.size(); i++)
+        {
+            if(squirrels.get(i).getNut())
+            {
+                victory = false;
+            }
+        }
+        return victory;
+    }
+
+    public void dropNut(Squirrel sq)
+    {
+
+        String currentName = getHeadTile(sq).getCurrentName();
+        String newName = currentName.substring(0, currentName.length() - 3);
+        String newFileName = "icons/" + newName + ".png";
+        Picture newHead = new Picture(newFileName, sq.getDirection() * 90);
+        getHeadTile(sq).setButton(newHead);
+        sq.dropNut();
+
+    }
+
+    public void addSquirrel(Squirrel sq)
+    {
+        squirrels.add(sq);
+        displaySquirrel(sq);
+    }
+    public Tile getHeadTile(Squirrel sq)
+    {
+        return tiles[sq.getX()][sq.getY()];
+    }
+
+    public Tile getTailTile(Squirrel sq)
+    {
+        return tiles[sq.getTailsX()][sq.getTailsY()];
     }
 
 
     public void selectTile(int i, int j)
     {
-        if(tiles[i][j].equals("Hole") || tiles[i][j].equals("HoleNut") || tiles[i][j].equals("Empty") || tiles[i][j].equals("Flower") || tiles[i][j].equals("SquirrelFlower") )
+        if(tiles[i][j].getCurrentName().equals("Hole") || tiles[i][j].getCurrentName().equals("HoleNut") || tiles[i][j].getCurrentName().equals("Empty") || tiles[i][j].getCurrentName().equals("Flower") || tiles[i][j].getCurrentName().equals("SquirrelFlower") )
         {
             return;
         }
@@ -307,6 +344,8 @@ public class GameBoard
             System.out.println("Set current squirrel");
         }
     }
+
+        
 
 
     //Getter and setter methods
@@ -340,7 +379,7 @@ public class GameBoard
 
     */
     public void displayLevel1()
-    {
+    {        
         displayImage(0,0, empty);
         displayImage(1,0, empty);
         displayImage(2,0, hole);
@@ -361,18 +400,46 @@ public class GameBoard
         Squirrel red = new Squirrel("Red", true, 1,1,Squirrel.west);
         Squirrel grey = new Squirrel("Grey", true, 2,2 ,Squirrel.north);
 
-        displaySquirrel(red);
-        displaySquirrel(grey);
+        addSquirrel(red);
+        addSquirrel(grey);
         currentSquirrel = red;
     }
 
+
+    public void displayLevel2()
+    {
+        displayImage(0,0, empty);
+        displayImage(1,0, empty);
+        displayImage(2,0, hole);
+        displayImage(3,0, empty);
+
+        displayImage(0,1, hole);
+        displayImage(1,1, empty);
+        displayImage(2,1, squirrelFlower);
+
+        displayImage(1,2, squirrelFlower);
+        displayImage(2,2, empty);
+        
+        displayImage(1,3, empty);
+        displayImage(2,3, empty);
+        displayImage(3,3, flower);
+
+        Squirrel brown = new Squirrel("Brown", true, 0, 2, Squirrel.north);
+        Squirrel black = new Squirrel("Black", true, 3, 2, Squirrel.south);
+
+        addSquirrel(brown);
+        addSquirrel(black);
+        currentSquirrel = brown;
+
+
+    }
 
     
 
     public static void main(String[] args)
     {
         GameBoard g = new GameBoard();
-        g.displayLevel1();
+        g.displayLevel2();
 
 
     }

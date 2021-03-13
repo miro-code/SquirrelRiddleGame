@@ -65,16 +65,10 @@ public class MovementListener implements ActionListener
             {
                 for(int j = 0; j<tiles[i].length; j++)
                 {
-                    System.out.print("Checked ");
-                    System.out.print(i);
-                    System.out.println(j);
                     if(tiles[i][j].getButton() == e.getSource())
                     {
                         game.selectTile(i,j);
-                        System.out.print("Selected: ");
-                        System.out.print(i);
-                        System.out.println(j);
-                        break;
+                        return;
                         
 
                     }
