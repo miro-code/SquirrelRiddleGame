@@ -35,7 +35,13 @@ public class Squirrel
     public Squirrel(String color, boolean nut, int x, int y, int direction) throws IllegalArgumentException
     {
 
-        if(!(color == "Red" || color == "Black" || color == "Grey" || color == "Brown"))
+        this.nut = nut;
+        this.color = color;
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+
+        if(!(color.equals("Red") || color.equals("Black") || color.equals("Grey") || color.equals("Brown")))
         {
             throw new IllegalArgumentException("Tried to create squirrel with unknown color");
         }
@@ -43,6 +49,17 @@ public class Squirrel
         {
             throw new IllegalArgumentException("Tried to create squirrel with unknown direction");
         }
+
+        //Set the appropriate flower attributes for black and brown squirrels
+        if( color.equals("Black") || color.equals("Brown") )
+        {
+            flower = true;
+        }
+        else
+        {
+            flower = false;
+        }
+
         this.nut = nut;
         this.color = color;
         this.x = x;
@@ -56,16 +73,16 @@ public class Squirrel
     {
         switch(direction)
         {
-            case 0:
+            case north:
                 y--;
                 break;
-            case 1:
+            case east:
                 x++;
                 break;
-            case 2:
+            case south:
                 y++;
                 break;
-            case 3:
+            case west:
                 x--;
                 break;            
         }
@@ -138,6 +155,94 @@ public class Squirrel
         this.direction = direction;
     }
 
+    public boolean getFlower()
+    {
+        return flower;
+    }
+
+    public int getFlowerX() 
+    {
+        if(!flower)
+        {
+            System.out.println("Something went wrong: this specific squirrel doesnt have a flower");
+        }
+
+        if( color.equals("Black"))
+        {
+            switch(direction)
+                {
+                    case north:
+                        return x + 1;
+                    case east:
+                        return getTailsX();
+                    case south:
+                        return x - 1;
+                    default:
+                        return getTailsX();
+                }
+        }
+        else
+        {
+            if(!color.equals("Brown"))
+            {
+                System.out.println("Something went wrong: this color squirrel doesnt have a flower");
+            }
+            switch(direction)
+                {
+                    case north:
+                        return x + 1;
+                    case east:
+                        return x;
+                    case south:
+                        return x - 1;
+                    default:
+                        return x;
+                }
+        }
+        
+    }
+
+    public int getFlowerY() 
+    {
+        if(!flower)
+        {
+            System.out.println("Something went wrong: this specific squirrel doesnt have a flower");
+        }
+
+        if( color.equals("Black"))
+        {
+            switch(direction)
+                {
+                    case north:
+                        return getTailsY();
+                    case east:
+                        return y + 1;
+                    case south:
+                        return getTailsY();
+                    default:
+                        return y - 1;
+                }
+        }
+        else
+        {
+            if(!color.equals("Brown"))
+            {
+                System.out.println("Something went wrong: this color squirrel doesnt have a flower");
+            }
+            switch(direction)
+                {
+                    case north:
+                        return y;
+                    case east:
+                        return y + 1;
+                    case south:
+                        return y;
+                    default:
+                        return y - 1;
+                }
+        }
+ 
+    }
     public String getColor()
     {
         return color;

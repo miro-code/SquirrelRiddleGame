@@ -5,14 +5,14 @@ import javax.swing.JButton;
 
 public class MovementListener implements ActionListener
 {
-    GameBoard game;
+    private GameBoard game;
 
-    JButton up;
-    JButton down;
-    JButton right; 
-    JButton left; 
+    private JButton up;
+    private JButton down;
+    private JButton right; 
+    private JButton left; 
 
-    Tile[][] tiles;
+    private Tile[][] tiles;
 
     public MovementListener(GameBoard game)
     {
@@ -44,19 +44,19 @@ public class MovementListener implements ActionListener
         System.out.println("registered action");
         if(e.getSource() == up)
         {
-                game.moveCurrentSquirrel(0);
+            game.moveCurrentSquirrel(Squirrel.north);
         }
         else if(e.getSource() == right)
         {
-            game.moveCurrentSquirrel(1);
+            game.moveCurrentSquirrel(Squirrel.east);
         }
         else if(e.getSource() == down)
         {
-            game.moveCurrentSquirrel(2);
+            game.moveCurrentSquirrel(Squirrel.south);
         }
         else if(e.getSource() == left)
         {
-            game.moveCurrentSquirrel(3);
+            game.moveCurrentSquirrel(Squirrel.west);
         }
         else
         {

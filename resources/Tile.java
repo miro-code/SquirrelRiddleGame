@@ -45,7 +45,7 @@ public class Tile
         {
 
             //If the original tile is a squirrel set empty
-            if(currentName.equals("Hole") || currentName.equals("HoleNut") || currentName.equals("Empty") || currentName.equals("Flower") || currentName.equals("SquirrelFlower") )
+            if(currentName.equals("Hole") || currentName.equals("HoleNut") || currentName.equals("Empty") || currentName.equals("Flower"))
             {
                 original = p;
                 originalName = currentName;
@@ -69,7 +69,6 @@ public class Tile
         {
             return true;
         }
-
 
         return currentName.equals("Hole") || currentName.equals("HoleNut") || currentName.equals("Empty");
 

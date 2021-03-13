@@ -67,6 +67,7 @@ public class GameBoard
         panel = new JPanel();
 
         layout = new BorderLayout();
+        panel.setLayout(layout);
         window.setContentPane(panel);
 
         //Create a field panel with grid layout for the game board (without the arrows)
@@ -76,7 +77,6 @@ public class GameBoard
 
 
 
-        panel.setLayout(layout);
 
         //Add the game field in the CENTER
         //This is the preffered way to insert the parameters according to oracles documentation
@@ -138,12 +138,21 @@ public class GameBoard
     /** Displays a squirrel on the game board
 
     @param sq squirrel to be displayed
-    @throws IllegalArgumentException if the squirrel can not be displayed due to its attributes 
+    @throws IllegalArgumentException if at least one part of the squirrel is off the board
 	 */
     public void displaySquirrel(Squirrel sq) throws IllegalArgumentException
     {
 
-            if(sq.getY() < 0 || sq.getY()>= yFields || sq.getX() < 0 || sq.getX() >= xFields || sq.getTailsX() < 0 || getTailsX() >= xFields)
+            //if there is a flower check if its on the board
+            if(sq.getFlower())
+            {
+                if(sq.getFlowerX() < 0 || sq.getFlowerX() > xFields || sq.getFlowerY() < 0 || sq.getFlowerY() > yFields)
+                {
+                    throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
+                }
+            }
+            //Check if the hole squirrel is on the board
+            if(sq.getY() < 0 || sq.getY()>= yFields || sq.getX() < 0 || sq.getX() >= xFields || sq.getTailsX() < 0 || sq.getTailsX() >= xFields)
             {
                 throw new IllegalArgumentException("Squirrel located out of game board. Start rescue mission immediatly");
             }
@@ -172,22 +181,13 @@ public class GameBoard
         //Let the images appear in the appropriate places
         getHeadTile(sq).setButton(p1, sq);
 
-        switch(sq.getDirection())
-        {
-            case 0:
-                tiles[sq.getX()][sq.getY()+1].setButton(p2, sq);
-                break;
-            case 1:
-                tiles[sq.getX()-1][sq.getY()].setButton(p2, sq);
-                break;
-            case 2:
-                tiles[sq.getX()][sq.getY()-1].setButton(p2, sq);
-                break;
-            case 3:
-                tiles[sq.getX()+ 1][sq.getY()].setButton(p2, sq);
-                break;            
-        }
+        getTailTile(sq).setButton(p2, sq);
         
+        if(sq.getFlower())
+        {
+            Picture p3 = new Picture("icons/SquirrelFlower.png", sq.getDirection() * 90);
+            getFlowerTile(sq).setButton(p3, sq);
+        }
 
     }
 
@@ -219,16 +219,36 @@ public class GameBoard
         //check if the squirrel can be moved to the target tiles
         switch(dir)
         {
-            case 0:
-                if(sq.getY() - 1 < 0 || sq.getTailsY() - 1 < 0 )
+            case Squirrel.north:
+                if(sq.getFlower())
+                {
+                    if(sq.getFlowerY() -1 < 0 )
+                    {
+                        legalMove = false;
+                        break;
+                    }
+                }
+                if(sq.getY() - 1 < 0 || sq.getTailsY() - 1 < 0)
                 {
                     legalMove = false;
                     break;
                 }
                 legalMove = legalMove && tiles[sq.getX()][sq.getY()-1].isAccessible(sq);
                 legalMove = legalMove && tiles[sq.getTailsX()][sq.getTailsY()-1].isAccessible(sq);
+                if(sq.getFlower())
+                {
+                    legalMove = legalMove && tiles[sq.getFlowerX()][sq.getFlowerY()-1].isAccessible(sq);
+                }
                 break;
-            case 1:
+            case Squirrel.east:
+                if(sq.getFlower())
+                {
+                    if(sq.getFlowerX() + 1 > xFields - 1)
+                    {
+                        legalMove = false;
+                        break;
+                    }
+                }
                 if( sq.getX() +1 > xFields-1 || sq.getTailsX() + 1 > xFields-1 )
                 {
                     legalMove = false;
@@ -236,24 +256,54 @@ public class GameBoard
                 }
                 legalMove = legalMove && tiles[sq.getX()+1][sq.getY()].isAccessible(sq);
                 legalMove = legalMove && tiles[sq.getTailsX()+1][sq.getTailsY()].isAccessible(sq);
+                if(sq.getFlower())
+                {
+                    System.out.println(legalMove);
+                    legalMove = legalMove && tiles[sq.getFlowerX()+1][sq.getFlowerY()].isAccessible(sq);
+                }
+
                 break;
-            case 2:
+            case Squirrel.south:
+                if(sq.getFlower())
+                {
+                    if(sq.getFlowerY() + 1 > yFields - 1)
+                    {
+                        legalMove = false;
+                        break;
+                    }
+                }
                 if( sq.getY() + 1 > yFields-1 ||  sq.getTailsY() + 1 > yFields-1 )
                 {
                     legalMove = false;
                     break;
                 }
                 legalMove = legalMove && tiles[sq.getX()][sq.getY()+1].isAccessible(sq);
-                legalMove = legalMove && tiles[sq.getTailsX()][sq.getTailsY()+1].isAccessible(sq);                
+                legalMove = legalMove && tiles[sq.getTailsX()][sq.getTailsY()+1].isAccessible(sq);
+                if(sq.getFlower())
+                {
+                    legalMove = legalMove && tiles[sq.getFlowerX()][sq.getFlowerY()+1].isAccessible(sq);                
+                }
                 break;
-            case 3:
-                if(sq.getX() - 1< 0 || sq.getTailsX() - 1< 0 )
+            case Squirrel.west:
+                if(sq.getFlower())
+                {
+                    if(sq.getFlowerX() - 1 < 0 )
+                    {
+                        legalMove = false;
+                        break;
+                    }
+                }
+                if(sq.getX() - 1< 0 || sq.getTailsX() - 1 < 0)
                 {
                     legalMove = false;
                     break;
                 }
                 legalMove = legalMove && tiles[sq.getX() - 1][sq.getY()].isAccessible(sq);
                 legalMove = legalMove && tiles[sq.getTailsX() - 1][sq.getTailsY()].isAccessible(sq);
+                if(sq.getFlower())
+                {
+                    legalMove = legalMove && tiles[sq.getFlowerX() - 1][sq.getFlowerY()].isAccessible(sq);
+                }
                 break;     
             default:
                 throw new IllegalArgumentException("Squirrel facing into an unrecognized direction. It might have discovered the 3rd dimension. Beware.");
@@ -261,34 +311,45 @@ public class GameBoard
 
         if(!legalMove)
         {
-            System.out.println("Illegal move");
+            System.out.println("Illegal move --");
             return;
         }
 
 
         getHeadTile(sq).displayOriginalButton();
         getTailTile(sq).displayOriginalButton();
+
+        if(sq.getFlower())
+        {
+            getFlowerTile(sq).displayOriginalButton();
+        }        
         sq.move(dir);
         displaySquirrel(sq);
 
+        //Check if the squirrel drops its nut in this move
         if(sq.getNut())
         {
-            System.out.println("Has Nut");
             if(getHeadTile(sq).getOriginalName().equals("Hole"))
             {
-                System.out.println("consent");
                 dropNut(sq);
 
                 Picture nut = new Picture("icons/HoleNut.png", sq.getDirection() * 90);
                 getHeadTile(sq).setOriginal(nut);
-                System.out.println("places nut");
             }
         }
 
         if(checkVictory())
         {
             System.out.println("VICTORY");
+            victory();
         }
+    }
+
+    public void victory()
+    {
+        window.dispose();
+        new VictoryListener();
+
     }
 
     public boolean checkVictory()
@@ -331,6 +392,14 @@ public class GameBoard
         return tiles[sq.getTailsX()][sq.getTailsY()];
     }
 
+    public Tile getFlowerTile(Squirrel sq) throws IllegalArgumentException
+    {
+        if(!sq.getFlower())
+        {
+            throw new IllegalArgumentException("Cant return Flower Tile because squirrel has no flower");
+        }
+        return tiles[sq.getFlowerX()][sq.getFlowerY()];
+    }
 
     public void selectTile(int i, int j)
     {
@@ -434,14 +503,39 @@ public class GameBoard
 
     }
 
+    public void displayLevel3()
+    {
+        displayImage(0,0, empty);
+        displayImage(1,0, empty);
+        displayImage(2,0, hole);
+        displayImage(3,0, empty);
+
+        displayImage(0,1, hole);
+        displayImage(1,1, empty);
+        displayImage(2,1, squirrelFlower);
+
+        displayImage(1,2, squirrelFlower);
+        displayImage(2,2, empty);
+        
+        displayImage(1,3, empty);
+        displayImage(2,3, empty);
+        displayImage(3,3, flower);
+
+        Squirrel brown = new Squirrel("Brown", true, 0, 2, Squirrel.north);
+        Squirrel black = new Squirrel("Black", true, 3, 2, Squirrel.south);
+
+        addSquirrel(brown);
+        addSquirrel(black);
+        currentSquirrel = brown;
+
+
+    }
+
     
 
     public static void main(String[] args)
     {
-        GameBoard g = new GameBoard();
-        g.displayLevel2();
-
-
+        new MenuListener();
     }
 
 }
