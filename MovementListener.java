@@ -41,7 +41,6 @@ public class MovementListener implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        System.out.println("registered action");
         if(e.getSource() == up)
         {
             game.moveCurrentSquirrel(Squirrel.north);

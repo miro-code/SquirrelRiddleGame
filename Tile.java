@@ -108,7 +108,6 @@ public class Tile
 
     public String getOriginalName()
     {
-        System.out.println(originalName);
         return originalName;
     }
 

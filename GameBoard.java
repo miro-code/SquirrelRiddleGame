@@ -46,6 +46,8 @@ public class GameBoard
     private Squirrel currentSquirrel;
     private LinkedList<Squirrel> squirrels;
 
+    private boolean victoryDisplayed;
+
 
     /** Creates a new GameBoard
 
@@ -53,7 +55,9 @@ public class GameBoard
 
     public GameBoard()
     {
+        victoryDisplayed = false;
         squirrels = new LinkedList<Squirrel>();
+        
         //Create the Frame
         window = new JFrame("Nut Store");
         //On close exit the program
@@ -114,7 +118,6 @@ public class GameBoard
         left = new JButton(arrowLeft);
         left.setBorder(null);
         //left.addActionListener(actionListener);
-
 
         panel.add(up, BorderLayout.NORTH);
         panel.add(right, BorderLayout.EAST);
@@ -311,7 +314,7 @@ public class GameBoard
 
         if(!legalMove)
         {
-            System.out.println("Illegal move --");
+            System.out.println("Illegal move of " + currentSquirrel.getColor() + " squirrel");
             return;
         }
 
@@ -347,8 +350,12 @@ public class GameBoard
 
     public void victory()
     {
-        window.dispose();
-        new VictoryListener();
+
+        if(!victoryDisplayed)
+        {
+            new VictoryListener(window);
+            victoryDisplayed = true;
+        }
 
     }
 
@@ -410,7 +417,7 @@ public class GameBoard
         else
         {
             currentSquirrel = tiles[i][j].getSquirrel();
-            System.out.println("Set current squirrel");
+            System.out.println("Set current squirrel to " + currentSquirrel.getColor());
         }
     }
 
@@ -484,9 +491,8 @@ public class GameBoard
 
         displayImage(0,1, hole);
         displayImage(1,1, empty);
-        displayImage(2,1, squirrelFlower);
 
-        displayImage(1,2, squirrelFlower);
+        displayImage(1,2, hole);
         displayImage(2,2, empty);
         
         displayImage(1,3, empty);
@@ -512,9 +518,8 @@ public class GameBoard
 
         displayImage(0,1, hole);
         displayImage(1,1, empty);
-        displayImage(2,1, squirrelFlower);
 
-        displayImage(1,2, squirrelFlower);
+        displayImage(1,2, hole);
         displayImage(2,2, empty);
         
         displayImage(1,3, empty);
@@ -527,7 +532,6 @@ public class GameBoard
         addSquirrel(brown);
         addSquirrel(black);
         currentSquirrel = brown;
-
 
     }
 
