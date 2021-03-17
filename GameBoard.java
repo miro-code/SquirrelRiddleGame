@@ -454,36 +454,9 @@ public class GameBoard
     /** Displays level 1 on the board as described in the course work specification
 
     */
-    public void displayLevel1()
-    {        
-        displayImage(0,0, empty);
-        displayImage(1,0, empty);
-        displayImage(2,0, hole);
-        displayImage(3,0, empty);
-
-        displayImage(0,1, hole);
-        displayImage(3,1, empty);
-
-        displayImage(0,2, empty);
-        displayImage(1,2, flower);
-        displayImage(3,2, empty);
-
-        displayImage(0,3, empty);
-        displayImage(1,3, empty);
-        displayImage(3,3, hole);
-
-
-        Squirrel red = new Squirrel("Red", true, 1,1,Squirrel.west);
-        Squirrel grey = new Squirrel("Grey", true, 2,2 ,Squirrel.north);
-
-        addSquirrel(red);
-        addSquirrel(grey);
-        currentSquirrel = red;
-    }
-
-
-    public void displayLevel2()
+    public void displayEmptyLevel()
     {
+
         displayImage(0,0, empty);
         displayImage(1,0, empty);
         displayImage(2,0, hole);
@@ -491,12 +464,40 @@ public class GameBoard
 
         displayImage(0,1, hole);
         displayImage(1,1, empty);
+        displayImage(2,1, empty);
+        displayImage(3,1, empty);
 
+        displayImage(0,2, empty);
         displayImage(1,2, hole);
         displayImage(2,2, empty);
-        
+        displayImage(3,2, empty);
+
+        displayImage(0,3, empty);
         displayImage(1,3, empty);
         displayImage(2,3, empty);
+        displayImage(3,3, hole);
+
+
+    }
+    public void displayLevel1()
+    {        
+        displayEmptyLevel();
+        displayImage(1,2, flower); //That makes this tiles original hole and current flower but that doesnt matter because the flower doesnt move
+   
+        Squirrel red = new Squirrel("Red", true, 1,1,Squirrel.west);
+        Squirrel grey = new Squirrel("Grey", true, 2,2 ,Squirrel.north);
+
+        addSquirrel(red);
+        addSquirrel(grey);
+        currentSquirrel = red;
+
+    }
+
+
+    public void displayLevel2()
+    {
+        displayEmptyLevel();
+
         displayImage(3,3, flower);
 
         Squirrel brown = new Squirrel("Brown", true, 0, 2, Squirrel.north);
@@ -511,26 +512,18 @@ public class GameBoard
 
     public void displayLevel3()
     {
-        displayImage(0,0, empty);
-        displayImage(1,0, empty);
-        displayImage(2,0, hole);
-        displayImage(3,0, empty);
-
-        displayImage(0,1, hole);
-        displayImage(1,1, empty);
-
-        displayImage(1,2, hole);
-        displayImage(2,2, empty);
+        displayEmptyLevel();
         
-        displayImage(1,3, empty);
-        displayImage(2,3, empty);
-        displayImage(3,3, flower);
+        Squirrel brown = new Squirrel("Brown", true, 2, 3, Squirrel.south);
+        Squirrel black = new Squirrel("Black", true, 2, 1, Squirrel.south);
+        Squirrel grey = new Squirrel("Grey", true, 3, 2, Squirrel.south);
+        Squirrel red = new Squirrel("Red", true, 0, 2, Squirrel.west);
 
-        Squirrel brown = new Squirrel("Brown", true, 0, 2, Squirrel.north);
-        Squirrel black = new Squirrel("Black", true, 3, 2, Squirrel.south);
 
         addSquirrel(brown);
         addSquirrel(black);
+        addSquirrel(grey);
+        addSquirrel(red);
         currentSquirrel = brown;
 
     }
