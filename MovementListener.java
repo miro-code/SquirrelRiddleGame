@@ -20,6 +20,7 @@ public class MovementListener implements ActionListener
     private JButton down;
     private JButton right; 
     private JButton left; 
+    private JButton backToMenu;
 
     private Tile[][] tiles;
 
@@ -38,11 +39,14 @@ public class MovementListener implements ActionListener
         this.left = game.getLeftButton();
         this.right = game.getRightButton();
         this.tiles = game.getTiles();
+        this.backToMenu = game.getBackToMenu();
+
 
         up.addActionListener(this);
         down.addActionListener(this);
         left.addActionListener(this);
         right.addActionListener(this);
+        backToMenu.addActionListener(this);
 
         for(int i = 0; i<tiles.length; i++)
         {
@@ -61,7 +65,7 @@ public class MovementListener implements ActionListener
 
 	 */
     public void actionPerformed(ActionEvent e)
-    {
+    {        
         if(e.getSource() == up)
         {
             game.moveCurrentSquirrel(Squirrel.north);
@@ -77,6 +81,11 @@ public class MovementListener implements ActionListener
         else if(e.getSource() == left)
         {
             game.moveCurrentSquirrel(Squirrel.west);
+        }
+        else if(e.getSource() == backToMenu)
+        {
+            game.getWindow().dispose();
+            new MenuListener();
         }
         else
         {

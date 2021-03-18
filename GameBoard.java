@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.*;
 import java.util.LinkedList;
@@ -18,7 +19,10 @@ public class GameBoard
 
     private JFrame window;
     private JPanel panel;
+    private JPanel gamePanel;
     private JPanel fieldPanel;
+    private JPanel menuPanel; 
+
     private BorderLayout layout;
     private GridLayout fieldLayout;
 
@@ -39,9 +43,14 @@ public class GameBoard
     private JButton right;
     private JButton left;
 
+    private JButton backToMenu;
+
+    private JLabel movesDisplay;
 
     private int xFields = 4;
     private int yFields = 4;
+
+    private int moves = 0;
 
     private Squirrel currentSquirrel;
     private LinkedList<Squirrel> squirrels;
@@ -55,6 +64,7 @@ public class GameBoard
 
     public GameBoard()
     {
+        moves = 0;
         victoryDisplayed = false;
         squirrels = new LinkedList<Squirrel>();
         
@@ -67,24 +77,43 @@ public class GameBoard
         //set the frame to visible
         window.setVisible(true);
 
-        //create panel with border layout for the hole window
+
         panel = new JPanel();
 
+        //create gamePanel with border layout for the gamefield and arrows
+        gamePanel = new JPanel();
+        
+        //panel for the hole window
+        panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(gamePanel, BorderLayout.CENTER);
+
+        //panel for the menu
+        menuPanel = new JPanel();
+
         layout = new BorderLayout();
-        panel.setLayout(layout);
+        gamePanel.setLayout(layout);
         window.setContentPane(panel);
 
         //Create a field panel with grid layout for the game board (without the arrows)
         fieldPanel = new JPanel();
-        fieldLayout = new GridLayout(xFields, yFields);
+        fieldLayout = new GridLayout(yFields, xFields);
         fieldPanel.setLayout(fieldLayout);
 
+        backToMenu = new JButton("Back to Menu");
+        menuPanel.setLayout(new GridLayout(1,2));
+
+        panel.add(menuPanel, BorderLayout.NORTH);
+        menuPanel.add(backToMenu);
+
+        movesDisplay = new JLabel("Moves: 0", SwingConstants.CENTER);
+        menuPanel.add(movesDisplay);
 
 
 
         //Add the game field in the CENTER
         //This is the preffered way to insert the parameters according to oracles documentation
-        panel.add(fieldPanel, BorderLayout.CENTER);
+        gamePanel.add(fieldPanel, BorderLayout.CENTER);
 
         //initialize the fields array
         tiles = new Tile[xFields][yFields];
@@ -119,10 +148,10 @@ public class GameBoard
         left.setBorder(null);
         //left.addActionListener(actionListener);
 
-        panel.add(up, BorderLayout.NORTH);
-        panel.add(right, BorderLayout.EAST);
-        panel.add(down, BorderLayout.SOUTH);
-        panel.add(left, BorderLayout.WEST);
+        gamePanel.add(up, BorderLayout.NORTH);
+        gamePanel.add(right, BorderLayout.EAST);
+        gamePanel.add(down, BorderLayout.SOUTH);
+        gamePanel.add(left, BorderLayout.WEST);
 
 
         for(int i = 0; i < xFields; i++)
@@ -134,7 +163,7 @@ public class GameBoard
         }
 
         MovementListener movementListener = new MovementListener(this);
-
+        window.pack();
 
     }
 
@@ -333,6 +362,8 @@ public class GameBoard
         }        
         sq.move(dir);
         displaySquirrel(sq);
+        moves++;
+        movesDisplay.setText("Moves: " + String.valueOf(moves));
 
         //Check if the squirrel drops its nut in this move
         if(sq.getNut())
@@ -361,8 +392,10 @@ public class GameBoard
 
         if(!victoryDisplayed)
         {
-            new VictoryListener(window);
+            new VictoryListener(window, moves);
             victoryDisplayed = true;
+            window.setContentPane(gamePanel);
+            window.pack();
         }
 
     }
@@ -509,6 +542,21 @@ public class GameBoard
         return tiles;
     }
 
+    /** Get Method
+     * @return the 2D tiles array
+	 */  
+    public JButton getBackToMenu()
+    {
+        return backToMenu;
+    }
+
+    /** Get Method
+     * @return the window
+	 */  
+    public JFrame getWindow()
+    {
+        return window;
+    }
 
     /** Displays an empty level on the board
 

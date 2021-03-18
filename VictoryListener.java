@@ -20,10 +20,10 @@ public class VictoryListener implements ActionListener
     /** Returns a VictoryListener after creating a VictoryMenu and assigning the VictoryListener to it
 
 	 */
-    public VictoryListener(JFrame gameWindow)
+    public VictoryListener(JFrame gameWindow, int moves)
     {
         
-        JButton menuButton = new JButton("CONGRATULATIONS - YOU WON! PRESS THIS BUTTON TO RETURN TO THE LEVEL SELECTION");
+        JButton menuButton = new JButton("CONGRATULATIONS - YOU WON IN " + moves + " MOVES! PRESS TO RETURN TO MENU");
         menuButton.addActionListener(this);
         menu = new VictoryMenu(menuButton);
         this.gameWindow = gameWindow;
