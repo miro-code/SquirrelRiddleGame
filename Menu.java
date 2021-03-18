@@ -1,10 +1,21 @@
 import javax.swing.*;
 
+/**
+ *
+ * Menu for SCC.110 course work. Represents the Menu where you select your level
+ *
+ * Author: Miran Özdogan
+ *
+ *
+ **/
 public class Menu
 {
     private JFrame window;
     private JPanel panel;
 
+    /** @return an instance of Menu displaying Levels to choose from
+
+	 */
     public Menu(JButton level1, JButton level2, JButton level3)
     {
         //Create the Frame

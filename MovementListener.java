@@ -3,6 +3,15 @@ import java.awt.event.*;
 
 import javax.swing.JButton;
 
+/**
+ *
+ * MovementListener for SCC.110 course work. ActionListener to deal with input during the course of a game. 
+ * 
+ * Author: Miran Özdogan
+ *
+ *
+ **/
+
 public class MovementListener implements ActionListener
 {
     private GameBoard game;
@@ -13,6 +22,13 @@ public class MovementListener implements ActionListener
     private JButton left; 
 
     private Tile[][] tiles;
+
+    
+    /** @return an instence of a movement listener
+     * 
+     * @param game The game board whose buttons this listener is added to 
+     * 
+	 */
 
     public MovementListener(GameBoard game)
     {
@@ -39,6 +55,11 @@ public class MovementListener implements ActionListener
 
     }
 
+    /** Is called when a button this ActionListener was assigend to is pressed
+     * 
+     * @param e The ActionEvent that lead to the call of this method
+
+	 */
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == up)

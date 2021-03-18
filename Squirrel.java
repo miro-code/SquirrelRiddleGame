@@ -67,8 +67,11 @@ public class Squirrel
         this.direction = direction;
     }
 
-    //Getter and setter methods
 
+    /** Moves the squirrels coordinates one into the given direction
+     * @param direction direction to move the squirrel in
+
+	 */
     public void move(int direction)
     {
         switch(direction)
@@ -132,20 +135,34 @@ public class Squirrel
 
 
 
-    //Getter and setter methods
-
+    /** sets the nut attribute of this squirrel
+     * @param nut the boolean representing whether this squirrel holds a nut
+	 */
     public void setNut(boolean nut)
     {
         this.nut = nut;
     }
+
+    /** sets the x attribute of this squirrel
+     * @param x the new x coordinate
+	 */
     public void setX(int x)
     {
         this.x = x;
     }
+
+    /** sets the y attribute of this squirrel
+     * @param y the new y coordinate
+	 */
     public void setY(int y)
     {
         this.y = y;
     }
+
+    /** sets the direction attribute of this squirrel
+     * @param direction the new direction
+     * @throws IllegalArgumentException if the given direction is <0 or >3
+	 */
     public void setDirection(int direction) throws IllegalArgumentException
     {
         if(direction < 0 || direction > 3)
@@ -155,11 +172,17 @@ public class Squirrel
         this.direction = direction;
     }
 
+    /** 
+     * @return a boolean showing if the squirrel has a flower
+	 */
     public boolean getFlower()
     {
         return flower;
     }
 
+    /** 
+     * @return the current flowers x coordinate
+	 */
     public int getFlowerX() 
     {
         if(!flower)
@@ -201,6 +224,10 @@ public class Squirrel
         }
         
     }
+    
+    /** 
+     * @return the current flowers y coordinate
+	 */
 
     public int getFlowerY() 
     {
@@ -243,31 +270,52 @@ public class Squirrel
         }
  
     }
+    
+    /** 
+     * @return the squirrels color
+	 */
     public String getColor()
     {
         return color;
     }
 
+    /** 
+     * @return whether the squirrel has a nut
+	 */
     public boolean getNut()
     {
         return nut;
     }
+
+    /** 
+     * Sets the squirrels nut to false
+	 */
 
     public void dropNut()
     {
         nut = false;
     }
 
+
+    /** 
+     * @return the squirrels x-coordinate
+	 */
     public int getX()
     {
         return x;
     }
 
+    /** 
+     * @return the squirrels y-coordinate
+	 */
     public int getY()
     {
         return y;
     }
 
+    /** 
+     * @return the squirrels direction
+	 */
     public int getDirection()
     {
         return direction;

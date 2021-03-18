@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.LinkedList;
 /**
  *
- * Game Board for SCC.110 course work.
+ * Game Board for SCC.110 course work. Represents the Board on which the Nut Store Game is played.
  *
  * Author: Miran Özdogan
  *
@@ -212,6 +212,11 @@ public class GameBoard
     }
 
 
+    /** Moves the current selected squirrel
+     * 
+    @param dir Direction the squirrel should be moved in
+    @throws IllegalArgumentException if @param dir < 0 or > 3
+	 */
 
     public void moveCurrentSquirrel(int dir) throws IllegalArgumentException
     {
@@ -348,6 +353,9 @@ public class GameBoard
         }
     }
 
+    /** Displays the Victory Menu
+	 */
+
     public void victory()
     {
 
@@ -359,6 +367,11 @@ public class GameBoard
 
     }
 
+    /** Checks if the Game is won
+    
+    @return boolean showing if game is won
+
+	 */
     public boolean checkVictory()
     {
         boolean victory = true;
@@ -372,6 +385,10 @@ public class GameBoard
         return victory;
     }
 
+    /** Takes the nut away from the given squirrel 
+
+    @param sq squirrel that drops its nut
+	 */
     public void dropNut(Squirrel sq)
     {
 
@@ -384,21 +401,43 @@ public class GameBoard
 
     }
 
+    /** Adds squirrel to the game board
+
+    @param sq squirrel to be added
+	 */
     public void addSquirrel(Squirrel sq)
     {
         squirrels.add(sq);
         displaySquirrel(sq);
     }
+
+    /** returns the Tile on which a squirrels head is displayed
+
+    @param sq squirrel that we need the head of
+    @return the tile on which the squirrels head is displayed
+
+	 */
     public Tile getHeadTile(Squirrel sq)
     {
         return tiles[sq.getX()][sq.getY()];
     }
 
+    /** returns the Tile on which a squirrels Tail is displayed
+
+    @param sq squirrel that we need the Tail of
+    @return the tile on which the squirrels head is displayed
+
+	 */
     public Tile getTailTile(Squirrel sq)
     {
         return tiles[sq.getTailsX()][sq.getTailsY()];
     }
 
+    /** returns the Tile on which a squirrels flower is displayed
+
+    @param sq squirrel that we need the flower of
+    @return the tile on which the squirrels flower is displayed
+	 */
     public Tile getFlowerTile(Squirrel sq) throws IllegalArgumentException
     {
         if(!sq.getFlower())
@@ -408,6 +447,12 @@ public class GameBoard
         return tiles[sq.getFlowerX()][sq.getFlowerY()];
     }
 
+    /** If a given Tile contains a squirrel it is selected as the current squirrel
+
+    @param i x coordinate of the tile
+    @param j y coordinate of the tile
+
+	 */
     public void selectTile(int i, int j)
     {
         if(tiles[i][j].getCurrentName().equals("Hole") || tiles[i][j].getCurrentName().equals("HoleNut") || tiles[i][j].getCurrentName().equals("Empty") || tiles[i][j].getCurrentName().equals("Flower") || tiles[i][j].getCurrentName().equals("SquirrelFlower") )
@@ -424,34 +469,48 @@ public class GameBoard
         
 
 
-    //Getter and setter methods
+    /** Get Method
+     * @return the up button
+	 */    
     public JButton getUpButton()
     {
         return up;
     }
 
+    /** Get Method
+     * @return the down button
+	 */  
     public JButton getDownButton()
     {
         return down;
     }
 
+    /** Get Method
+     * @return the right button
+	 */  
     public JButton getRightButton()
     {
         return right;
     }
 
+    /** Get Method
+     * @return the left button
+	 */  
     public JButton getLeftButton()
     {
         return left;
     }
 
+    /** Get Method
+     * @return the 2D tiles array
+	 */  
     public Tile[][] getTiles()
     {
         return tiles;
     }
 
 
-    /** Displays level 1 on the board as described in the course work specification
+    /** Displays an empty level on the board
 
     */
     public void displayEmptyLevel()
@@ -479,6 +538,10 @@ public class GameBoard
 
 
     }
+
+    /** Displays level on the board as described in the course work specification
+
+    */
     public void displayLevel1()
     {        
         displayEmptyLevel();
@@ -494,6 +557,9 @@ public class GameBoard
     }
 
 
+    /** Displays level 2 on the board as described in the course work specification
+
+    */
     public void displayLevel2()
     {
         displayEmptyLevel();
@@ -509,7 +575,9 @@ public class GameBoard
 
 
     }
+   /** Displays level 3 on the board as described in the course work specification
 
+    */
     public void displayLevel3()
     {
         displayEmptyLevel();
@@ -530,6 +598,9 @@ public class GameBoard
 
     
 
+    /** Main Method for starting the Game
+
+    */
     public static void main(String[] args)
     {
         new MenuListener();

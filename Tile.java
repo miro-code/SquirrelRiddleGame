@@ -2,7 +2,14 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-
+/**
+ *
+ * Tile for SCC.110 course work. Each instance represents one field on the game board.
+ *
+ * Author: Miran Özdogan
+ *
+ *
+ **/
 public class Tile
 {
     private JButton button;
@@ -62,6 +69,13 @@ public class Tile
         button.setIcon(p);
     }
 
+    /** Checks if the given squirrel can be placed on this Tile
+     * 
+     * @param sq the squirrel that is checked for
+     * @return whether the squirrel can be placed here
+
+	 */
+
     public boolean isAccessible(Squirrel sq)
     {
         //the squirrels tail/head can access a tile if its head/tail is already on it 
@@ -74,17 +88,28 @@ public class Tile
 
     }
 
+    /** Sets this tiles image and squirrel
+     * 
+     * @param sq the squirrel that this tile is being assigned to
+     * @return the image that this button shall display
+	 */
     public void setButton(Picture p, Squirrel sq)
     {
         this.squirrel = sq;
         setButton(p);
     }
 
+    /** sets the button to the picture in original
+     * 
+	 */
     public void displayOriginalButton()
     {
         setButton(original);
     }
 
+    /** sets the original to a given picture
+     * @param p the picture
+	 */
     public void setOriginal(Picture p)
     {
         original = p;
@@ -96,26 +121,41 @@ public class Tile
         originalName = imageName.substring(0, imageName.length() - 4);
     }
 
+    /** 
+     * @return the name of the current picture on display 
+	 */
     public String getCurrentName()
     {
         return currentName;
     }
 
+    /** 
+     * @return the picture in original
+	 */
     public Picture getOriginal()
     {
         return original;
     }
 
+    /** 
+     * @return the name of the original picture 
+	 */
     public String getOriginalName()
     {
         return originalName;
     }
 
+    /** 
+     * @return the Jbutton of this tile
+	 */
     public JButton getButton()
     {
         return button;
     }
 
+    /** 
+     * @return the squirrel this tile is assigned to 
+	 */
     public Squirrel getSquirrel()
     {
         return squirrel;

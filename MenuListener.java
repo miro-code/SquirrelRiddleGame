@@ -1,6 +1,15 @@
 import javax.swing.*;
 import java.awt.event.*;
 
+
+/**
+ *
+ * Menu Listener for SCC.110 course work. Action Listener to deal with user input on the menu
+ *
+ * Author: Miran Özdogan
+ *
+ *
+ **/
 public class MenuListener implements ActionListener
 {
     private Menu menu;
@@ -8,6 +17,9 @@ public class MenuListener implements ActionListener
     private JButton level2;
     private JButton level3;
 
+    /** @return a MenuListener after creating a Menu and assigning the MenuListener to it
+
+	 */
     public MenuListener()
     {
 
@@ -23,6 +35,12 @@ public class MenuListener implements ActionListener
 
     }
 
+
+    /** Is called when a button this ActionListener was assigend to is pressed
+     * 
+     * @param e The ActionEvent that lead to the call of this method
+
+	 */
 
     public void actionPerformed(ActionEvent e)
     {
